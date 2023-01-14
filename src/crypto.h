@@ -47,7 +47,7 @@ class crypto
     int hex_passphrase_size;
 
     // EVP stuff
-    EVP_CIPHER_CTX ctx;
+    EVP_CIPHER_CTX* ctx;
 
     public:
 
@@ -106,9 +106,9 @@ class crypto
 
         direction = direc;
         // EVP stuff
-        EVP_CIPHER_CTX_init(&ctx);
+        EVP_CIPHER_CTX_init(ctx);
 
-        if (!EVP_CipherInit_ex(&ctx, cipher, NULL, password, ivec, direc)) {
+        if (!EVP_CipherInit_ex(ctx, cipher, NULL, password, ivec, direc)) {
             fprintf(stderr, "error setting encryption scheme\n");
             exit(EXIT_FAILURE);
         }
@@ -118,7 +118,7 @@ class crypto
 //    {
 //        // i guess thread issues break this but it needs to be done
 //        //TODO: find out why this is bad and breaks things
-//        EVP_CIPHER_CTX_cleanup(&ctx);
+//        EVP_CIPHER_CTX_cleanup(ctx);
 //    }
 
     // Returns how much has been encrypted and will call encrypt final when
@@ -128,14 +128,14 @@ class crypto
         int evp_outlen;
 
         if (len == 0) {
-            if (!EVP_CipherFinal_ex(&ctx, (unsigned char *)out, &evp_outlen)) {
+            if (!EVP_CipherFinal_ex(ctx, (unsigned char *)out, &evp_outlen)) {
                 fprintf(stderr, "encryption error\n");
                 exit(EXIT_FAILURE);
             }
             return evp_outlen;
         }
 
-        if(!EVP_CipherUpdate(&ctx, (unsigned char *)out, &evp_outlen, (unsigned char *)in, len))
+        if(!EVP_CipherUpdate(ctx, (unsigned char *)out, &evp_outlen, (unsigned char *)in, len))
         {
             fprintf(stderr, "encryption error\n");
             exit(EXIT_FAILURE);

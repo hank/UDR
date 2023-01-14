@@ -34,6 +34,7 @@ void usage() {
 }
 
 void set_default_udr_options(UDR_Options * options) {
+    memset(options, 0, sizeof(UDR_Options));
     options->start_port = 9000;
     options->end_port = 9100;
     options->timeout = 15;
@@ -290,8 +291,8 @@ void get_host_username(UDR_Options * udr_options, int argc, char *argv[], int rs
                     exit(-1);
                 }
             }
-            snprintf(src_username, PATH_MAX, "%s", next_src_username);
-            snprintf(src_host, PATH_MAX, "%s", next_src_host);
+            snprintf(src_username, PATH_MAX-1, "%s", next_src_username);
+            snprintf(src_host, PATH_MAX-1, "%s", next_src_host);
             src_double_colon = next_src_double_colon;
             next_src_username[0] = '\0';
             next_src_host[0] = '\0';

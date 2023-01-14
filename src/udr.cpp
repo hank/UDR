@@ -201,7 +201,7 @@ int main(int argc, char* argv[]) {
             int ssh_idx = 0;
             ssh_argv[ssh_idx++] = curr_options.ssh_program;
             if (strlen(curr_options.username) != 0) {
-                ssh_argv[ssh_idx++] = "-l";
+                ssh_argv[ssh_idx++] = (char*)"-l";
                 ssh_argv[ssh_idx++] = curr_options.username;
             }
             ssh_argv[ssh_idx++] = curr_options.host;
@@ -246,6 +246,10 @@ int main(int argc, char* argv[]) {
         if (curr_options.encryption) {
             FILE *key_file = fopen(curr_options.key_filename, "w");
             int succ = chmod(curr_options.key_filename, S_IRUSR | S_IWUSR);
+            if(!succ) {
+                fprintf(stderr, "UDR ERROR: failed to chmod file: %s\n", curr_options.key_filename);
+                exit(EXIT_FAILURE);
+            }
 
             if (key_file == NULL) {
                 fprintf(stderr, "UDR ERROR: could not write key file: %s\n", curr_options.key_filename);
@@ -274,11 +278,11 @@ int main(int argc, char* argv[]) {
         strcpy(rsync_argv[rsync_idx], argv[rsync_arg_idx]);
         rsync_idx++;
 
-        rsync_argv[rsync_idx++] = "--blocking-io";
+        rsync_argv[rsync_idx++] = (char*)"--blocking-io";
 
         //rsync_argv[rsync_idx++] = curr_options.rsync_timeout;
 
-        rsync_argv[rsync_idx++] = "-e";
+        rsync_argv[rsync_idx++] = (char*)"-e";
 
         char udr_rsync_args1[100];
 

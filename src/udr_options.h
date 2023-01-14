@@ -22,6 +22,9 @@ and limitations under the License.
 #include <netdb.h>
 #include <limits.h>
 
+// Remove warnings about format truncation
+#pragma GCC diagnostic ignored "-Wformat-truncation"
+
 struct UDR_Options{
     int start_port;
     int end_port;

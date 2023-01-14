@@ -422,7 +422,7 @@ int run_receiver(UDR_Options * udr_options) {
     //perhaps want to at least check that starts with rsync?
     if(strncmp(cmd, "rsync ", 5) != 0){
 //      const char * error_msg = "UDR ERROR: non-rsync command detected\n";
-	exit(1);
+    exit(1);
     }
 
     char * rsync_cmd;
@@ -430,7 +430,7 @@ int run_receiver(UDR_Options * udr_options) {
         if(udr_options->verbose)
             fprintf(stderr, "[udr receiver] server connect mode\n");
 
-        rsync_cmd = (char *)malloc(100);
+        rsync_cmd = (char *)malloc(8192);
 
         if(strlen(udr_options->server_config) > 0){
             sprintf(rsync_cmd, "%s%s %s", "rsync --config=", udr_options->server_config, " --server --daemon .");
